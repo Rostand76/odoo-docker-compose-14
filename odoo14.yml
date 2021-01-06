@@ -1,0 +1,38 @@
+version: '3'
+services:
+  webod:
+    image: odoo:14.0
+    container_name: webo
+    depends_on:
+      - dbod
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: dbod
+      PORT: 5432
+      USER: odoo
+      PAWWORD: odoo
+    volumes:
+      - $PWD/odooconf:/etc/odoo
+      - $PWD/odoodata:/mnt/extra-addons
+    networks:
+      - prod
+
+  dbod:
+    image: postgres:10
+    container_name: dbo
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_USER: odoo
+    volumes:
+      - $PWD/odoodb:/var/lib/postgresql
+    networks:
+      - prod
+
+networks:
+  prod:
+volumes:
+  odooconf:
+  odoodat:
+  odoodb:
